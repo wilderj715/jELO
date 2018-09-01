@@ -1,20 +1,19 @@
 import requests
 from bs4 import BeautifulSoup
+from util import *
 
-# Subject to change ...
-url = "https://www.pro-football-reference.com/teams/nwe/2017.htm"
+for year in range(startYear, endYear + 1):
+	print "Gathering data for " + str(year)	
+	
+	for team in teamset:
+		url = "https://www.pro-football-reference.com/\
+		teams/" + team + "/" + str(year) + ".htm"
 
-page = requests.get(url)
-soup = BeautifulSoup(page.content, 'html.parser')
-tables = soup.find_all('div', {"class": "table_wrapper"})
-tablecount = 0
-
-if page.status_code == 200:
-	print "Data retrieved from " + url + " successfully!"
-else:
-	print "URL: " + url + " could not be reached!"
-
-for t in tables:
-	tablecount+=1
-
-print "tablecount: " + str(tablecount)
+		page = requests.get(url)
+		
+		if page.status_code == 200:
+			soup = BeautifulSoup(page.content, 'html.parser')
+			tables = soup.find_all('div', {"class": "table_wrapper"})
+		else:
+			print "URL: " + url + " could not be reached!"
+	#TODO: cache data to file to speed up processing times
